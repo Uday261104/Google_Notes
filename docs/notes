@@ -1,0 +1,63 @@
+Container always contains only one child
+because is designed as single child widget
+
+
+The simplest way to remember it is:
+
+Column = arrange things from TOP → BOTTOM
+Row = arrange things from LEFT → RIGHT
+
+
+1. Use Column when things are vertical ↓
+Column(
+  children: [
+    Text("Google Notes"),
+    Text("My Notes"),
+    Icon(Icons.note),
+  ],
+)
+
+UI:
+
+Google Notes
+     ↓
+My Notes
+     ↓
+   📝
+
+For your Google Notes app, you might use a Column for the overall screen:
+
+Column(
+  children: [
+    SearchBar(),
+    NotesList(),
+    BottomButton(),
+  ],
+)
+
+
+2. Use Row when things are horizontal →
+Row(
+  children: [
+    Icon(Icons.menu),
+    Text("Google Notes"),
+    Icon(Icons.search),
+  ],
+)
+
+UI:
+
+☰    Google Notes    🔍
+
+This is perfect for your top app bar.
+
+
+Expanded tells a Row or Column: "Give this widget all the remaining available space
+
+
+1--> Overlay
+overlayColor controls the temporary color shown when the user presses, hovers over, or interacts with the button.
+
+resolveWith allows you to decide what color to use depending on the button's current state.
+
+WidgetStateProperty.all(...) means you're giving Flutter one shape to use for all states.
