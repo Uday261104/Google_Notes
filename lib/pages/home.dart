@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_notes/components/sidemenubar.dart';
 import 'package:google_notes/pages/colors.dart';
 
 class Home extends StatefulWidget {
@@ -9,9 +10,14 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  GlobalKey<ScaffoldState> _drawerKey = GlobalKey();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      endDrawerEnableOpenDragGesture: true,
+      key: _drawerKey,
+      drawer: SideMenu(),
       backgroundColor: bgColor,
       body: SafeArea(
         child: Container(
@@ -39,7 +45,9 @@ class _HomeState extends State<Home> {
                   children: [
                     // Menu
                     IconButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        _drawerKey.currentState!.openDrawer();
+                      },
                       icon: Icon(Icons.menu, color: white.withOpacity(0.7)),
                     ),
 

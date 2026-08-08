@@ -1,0 +1,160 @@
+import 'package:flutter/material.dart';
+import 'package:google_notes/pages/colors.dart';
+
+class SideMenu extends StatefulWidget {
+  const SideMenu({super.key});
+
+  @override
+  State<SideMenu> createState() => _SideMenuState();
+}
+
+class _SideMenuState extends State<SideMenu> {
+  @override
+  Widget build(BuildContext context) {
+    return Drawer(
+      child: Container(
+        decoration: BoxDecoration(
+          color: bgColor,
+        ),
+        child: SafeArea(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                margin: const EdgeInsets.symmetric(
+                  horizontal: 25,
+                  vertical: 16,
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Google Keep",
+                      style: TextStyle(
+                        color: white.withOpacity(0.8),
+                        fontSize: 25,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+
+                    const SizedBox(height: 10),
+
+                    Divider(
+                      color: white.withOpacity(0.3),
+                    ),
+
+                    const SizedBox(height: 10),
+
+                    // Notes
+                    Container(
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        color: white.withOpacity(0.12),
+                        borderRadius: const BorderRadius.only(
+                          topRight: Radius.circular(30),
+                          bottomRight: Radius.circular(30),
+                        ),
+                      ),
+                      child: TextButton(
+                        onPressed: () {
+                          print("Notes clicked");
+                        },
+                        style: TextButton.styleFrom(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 15,
+                            vertical: 12,
+                          ),
+                        ),
+                        child: Row(
+                          children: [
+                            Icon(
+                              Icons.lightbulb_outline,
+                              size: 25,
+                              color: white.withOpacity(0.8),
+                            ),
+                            const SizedBox(width: 15),
+                            Text(
+                              "Notes",
+                              style: TextStyle(
+                                color: white.withOpacity(0.8),
+                                fontSize: 18,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+
+                    const SizedBox(height: 5),
+
+                    // Archived
+                    TextButton(
+                      onPressed: () {
+                        print("Archived clicked");
+                      },
+                      style: TextButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 15,
+                          vertical: 12,
+                        ),
+                      ),
+                      child: Row(
+                        children: [
+                          Icon(
+                            Icons.archive_outlined,
+                            size: 25,
+                            color: white.withOpacity(0.7),
+                          ),
+                          const SizedBox(width: 15),
+                          Text(
+                            "Archived",
+                            style: TextStyle(
+                              color: white.withOpacity(0.7),
+                              fontSize: 18,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+
+                    const SizedBox(height: 5),
+
+                    // Settings
+                    TextButton(
+                      onPressed: () {
+                        print("Settings clicked");
+                      },
+                      style: TextButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 15,
+                          vertical: 12,
+                        ),
+                      ),
+                      child: Row(
+                        children: [
+                          Icon(
+                            Icons.settings_outlined,
+                            size: 25,
+                            color: white.withOpacity(0.7),
+                          ),
+                          const SizedBox(width: 15),
+                          Text(
+                            "Settings",
+                            style: TextStyle(
+                              color: white.withOpacity(0.7),
+                              fontSize: 18,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
