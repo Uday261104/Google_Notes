@@ -3,7 +3,6 @@ import 'package:google_notes/components/sidemenubar.dart';
 import 'package:google_notes/pages/colors.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:google_notes/pages/create_note.dart';
-import 'package:google_notes/pages/edit_note.dart';
 import 'package:google_notes/pages/note_view.dart';
 
 class Home extends StatefulWidget {
