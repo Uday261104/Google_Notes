@@ -15,3 +15,6 @@ TextButton.icon(
     ),
   ),
 )
+
+
+GestureDetector is used to detect user actions like tapping, swiping, long-pressing, etc.

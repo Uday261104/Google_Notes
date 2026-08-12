@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:google_notes/components/archive.dart';
+import 'package:google_notes/components/setting.dart';
 import 'package:google_notes/pages/colors.dart';
 
 class SideMenu extends StatefulWidget {
@@ -9,10 +11,14 @@ class SideMenu extends StatefulWidget {
 }
 
 class _SideMenuState extends State<SideMenu> {
+  int selectedIndex = 0;
+
   @override
   Widget build(BuildContext context) {
     return Drawer(
       child: Container(
+        width: double.infinity,
+        height: double.infinity,
         decoration: BoxDecoration(
           color: bgColor,
         ),
@@ -45,11 +51,13 @@ class _SideMenuState extends State<SideMenu> {
 
                     const SizedBox(height: 10),
 
-                    // Notes
+                    // ================= NOTES =================
                     Container(
                       width: double.infinity,
                       decoration: BoxDecoration(
-                        color: white.withOpacity(0.12),
+                        color: selectedIndex == 0
+                            ? white.withOpacity(0.12)
+                            : Colors.transparent,
                         borderRadius: const BorderRadius.only(
                           topRight: Radius.circular(30),
                           bottomRight: Radius.circular(30),
@@ -57,7 +65,11 @@ class _SideMenuState extends State<SideMenu> {
                       ),
                       child: TextButton(
                         onPressed: () {
-                          print("Notes clicked");
+                          setState(() {
+                            selectedIndex = 0;
+                          });
+
+                          Navigator.pop(context);
                         },
                         style: TextButton.styleFrom(
                           padding: const EdgeInsets.symmetric(
@@ -87,65 +99,107 @@ class _SideMenuState extends State<SideMenu> {
 
                     const SizedBox(height: 5),
 
-                    // Archived
-                    TextButton(
-                      onPressed: () {
-                        print("Archived clicked");
-                      },
-                      style: TextButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 15,
-                          vertical: 12,
+                    // ================= ARCHIVED =================
+                    Container(
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        color: selectedIndex == 1
+                            ? white.withOpacity(0.12)
+                            : Colors.transparent,
+                        borderRadius: const BorderRadius.only(
+                          topRight: Radius.circular(30),
+                          bottomRight: Radius.circular(30),
                         ),
                       ),
-                      child: Row(
-                        children: [
-                          Icon(
-                            Icons.archive_outlined,
-                            size: 25,
-                            color: white.withOpacity(0.7),
-                          ),
-                          const SizedBox(width: 15),
-                          Text(
-                            "Archived",
-                            style: TextStyle(
-                              color: white.withOpacity(0.7),
-                              fontSize: 18,
+                      child: TextButton(
+                        onPressed: () {
+                          setState(() {
+                            selectedIndex = 1;
+                          });
+
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const Archive(),
                             ),
+                          );
+                        },
+                        style: TextButton.styleFrom(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 15,
+                            vertical: 12,
                           ),
-                        ],
+                        ),
+                        child: Row(
+                          children: [
+                            Icon(
+                              Icons.archive_outlined,
+                              size: 25,
+                              color: white.withOpacity(0.7),
+                            ),
+                            const SizedBox(width: 15),
+                            Text(
+                              "Archived",
+                              style: TextStyle(
+                                color: white.withOpacity(0.7),
+                                fontSize: 18,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
 
                     const SizedBox(height: 5),
 
-                    // Settings
-                    TextButton(
-                      onPressed: () {
-                        print("Settings clicked");
-                      },
-                      style: TextButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 15,
-                          vertical: 12,
+                    // ================= SETTINGS =================
+                    Container(
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        color: selectedIndex == 2
+                            ? white.withOpacity(0.12)
+                            : Colors.transparent,
+                        borderRadius: const BorderRadius.only(
+                          topRight: Radius.circular(30),
+                          bottomRight: Radius.circular(30),
                         ),
                       ),
-                      child: Row(
-                        children: [
-                          Icon(
-                            Icons.settings_outlined,
-                            size: 25,
-                            color: white.withOpacity(0.7),
-                          ),
-                          const SizedBox(width: 15),
-                          Text(
-                            "Settings",
-                            style: TextStyle(
-                              color: white.withOpacity(0.7),
-                              fontSize: 18,
+                      child: TextButton(
+                        onPressed: () {
+                          setState(() {
+                            selectedIndex = 2;
+                          });
+
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const Setting(),
                             ),
+                          );
+                        },
+                        style: TextButton.styleFrom(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 15,
+                            vertical: 12,
                           ),
-                        ],
+                        ),
+                        child: Row(
+                          children: [
+                            Icon(
+                              Icons.settings_outlined,
+                              size: 25,
+                              color: white.withOpacity(0.7),
+                            ),
+                            const SizedBox(width: 15),
+                            Text(
+                              "Settings",
+                              style: TextStyle(
+                                color: white.withOpacity(0.7),
+                                fontSize: 18,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ],
