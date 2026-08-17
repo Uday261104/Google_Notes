@@ -19,9 +19,7 @@ class _SideMenuState extends State<SideMenu> {
       child: Container(
         width: double.infinity,
         height: double.infinity,
-        decoration: BoxDecoration(
-          color: bgColor,
-        ),
+        decoration: BoxDecoration(color: bgColor),
         child: SafeArea(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -45,9 +43,7 @@ class _SideMenuState extends State<SideMenu> {
 
                     const SizedBox(height: 10),
 
-                    Divider(
-                      color: white.withOpacity(0.3),
-                    ),
+                    Divider(color: white.withOpacity(0.3)),
 
                     const SizedBox(height: 10),
 

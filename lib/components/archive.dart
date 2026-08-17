@@ -18,34 +18,22 @@ class _ArchiveState extends State<Archive> {
         elevation: 0,
         title: const Text(
           "Archive",
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 16,
-          ),
+          style: TextStyle(color: Colors.white, fontSize: 16),
         ),
-        iconTheme: const IconThemeData(
-          color: Colors.white,
-        ),
+        iconTheme: const IconThemeData(color: Colors.white),
       ),
 
       body: const Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(
-              Icons.archive_outlined,
-              size: 80,
-              color: Colors.grey,
-            ),
+            Icon(Icons.archive_outlined, size: 80, color: Colors.grey),
 
             SizedBox(height: 15),
 
             Text(
               "No archived notes",
-              style: TextStyle(
-                color: Colors.grey,
-                fontSize: 16,
-              ),
+              style: TextStyle(color: Colors.grey, fontSize: 16),
             ),
           ],
         ),

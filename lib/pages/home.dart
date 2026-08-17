@@ -4,6 +4,8 @@ import 'package:google_notes/pages/colors.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:google_notes/pages/create_note.dart';
 import 'package:google_notes/pages/note_view.dart';
+import 'package:google_notes/services/db.dart';
+import 'package:google_notes/model/MyNoteModel.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -15,54 +17,85 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   final GlobalKey<ScaffoldState> _drawerKey = GlobalKey<ScaffoldState>();
 
+  final note = Note(
+    pin: false,
+    title: 'Shopping',
+    content: 'Buy milk',
+    createdTime: DateTime.now(),
+  );
+
   int selectedTab = 0;
 
-  List<Map<String, String>> notes = [
-    {"heading": "Shopping", "note": "Buy milk, vegetables and fruits."},
-    {
-      "heading": "Flutter",
-      "note":
-          "Learn ListView, GridView and StaggeredGridView. Understand how widgets are built dynamically and how to create responsive layouts.",
-    },
-    {
-      "heading": "Work",
-      "note": "Complete the project and push the code to GitHub.",
-    },
-    {
-      "heading": "DSA",
-      "note":
-          "Practice arrays, strings, linked lists, stacks, queues, trees and graphs. Solve at least five problems today.",
-    },
-    {"heading": "College", "note": "Complete the assignment."},
-    {
-      "heading": "Python",
-      "note":
-          "Revise Python basics, functions, classes and exception handling. Practice writing clean and reusable code.",
-    },
-    {
-      "heading": "Database",
-      "note": "Learn SQL joins, normalization and indexing.",
-    },
-    {
-      "heading": "Project Ideas",
-      "note":
-          "Build a notes application with search, categories, favorites and dark mode. Later add cloud synchronization and backup.",
-    },
-    {
-      "heading": "Meeting",
-      "note":
-          "Discuss the project requirements, divide the tasks among team members and finalize the development timeline.",
-    },
-    {
-      "heading": "Today",
-      "note":
-          "Finish Flutter UI, test the application on the emulator and fix any layout issues before pushing the changes.",
-    },
-  ];
+  List<Note> notes = [];
+
+  @override
+  void initState() {
+    super.initState();
+    getNotes();
+  }
+
+  // CREATE
+  Future<void> createEntry(Note note) async {
+    final createdNote = await NoteDatabase.instance.create(note);
+
+    print('Created note with ID: ${createdNote.id}');
+
+    await getNotes();
+  }
+
+  // READ ALL
+  Future<void> getNotes() async {
+    final fetchedNotes = await NoteDatabase.instance.readNotes();
+
+    setState(() {
+      notes = fetchedNotes;
+    });
+  }
+
+  // READ ONE
+  Future<void> readNote(int id) async {
+    final fetchedNote = await NoteDatabase.instance.readOneNote(id);
+
+    if (fetchedNote != null) {
+      setState(() {
+        notes = [fetchedNote];
+      });
+    }
+  }
+
+  // UPDATE
+  Future<void> updateNote(Note note) async {
+    final updatedNote = await NoteDatabase.instance.updateNote(note);
+
+    if (updatedNote != null) {
+      setState(() {
+        final index = notes.indexWhere((item) => item.id == updatedNote.id);
+
+        if (index != -1) {
+          notes[index] = updatedNote;
+        }
+      });
+    }
+  }
+
+  // DELETE
+  Future<void> deleteNote(int id) async {
+    await NoteDatabase.instance.deleteNote(id);
+
+    await getNotes();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _drawerKey,
+
+      drawer: const SideMenu(),
+
+      endDrawerEnableOpenDragGesture: true,
+
+      backgroundColor: bgColor,
+
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.push(
@@ -74,10 +107,7 @@ class _HomeState extends State<Home> {
         shape: const CircleBorder(),
         child: Icon(Icons.add, size: 45, color: white.withOpacity(0.7)),
       ),
-      key: _drawerKey,
-      drawer: const SideMenu(),
-      endDrawerEnableOpenDragGesture: true,
-      backgroundColor: bgColor,
+
       body: SafeArea(
         child: ScrollConfiguration(
           behavior: ScrollConfiguration.of(context).copyWith(overscroll: false),
@@ -85,7 +115,7 @@ class _HomeState extends State<Home> {
             child: Padding(
               padding: const EdgeInsets.only(bottom: 10),
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   // SEARCH BAR
                   Container(
@@ -114,6 +144,7 @@ class _HomeState extends State<Home> {
                           },
                           icon: Icon(Icons.menu, color: white.withOpacity(0.7)),
                         ),
+
                         Expanded(
                           child: Text(
                             "Search the Notes.....",
@@ -123,6 +154,7 @@ class _HomeState extends State<Home> {
                             ),
                           ),
                         ),
+
                         TextButton(
                           style: ButtonStyle(
                             shape: WidgetStateProperty.all(
@@ -144,10 +176,12 @@ class _HomeState extends State<Home> {
                             color: white.withOpacity(0.5),
                           ),
                         ),
+
                         CircleAvatar(
                           radius: 18,
                           backgroundColor: white.withOpacity(0.7),
                         ),
+
                         const SizedBox(width: 10),
                       ],
                     ),
@@ -177,7 +211,9 @@ class _HomeState extends State<Home> {
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
+
                               const SizedBox(height: 8),
+
                               Container(
                                 height: 2,
                                 width: 60,
@@ -189,6 +225,7 @@ class _HomeState extends State<Home> {
                           ),
                         ),
                       ),
+
                       Expanded(
                         child: GestureDetector(
                           onTap: () {
@@ -208,7 +245,9 @@ class _HomeState extends State<Home> {
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
+
                               const SizedBox(height: 8),
+
                               Container(
                                 height: 2,
                                 width: 60,
@@ -225,7 +264,7 @@ class _HomeState extends State<Home> {
 
                   const SizedBox(height: 15),
 
-                  // MASONRY GRID
+                  // NOTES
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 5),
                     child: MasonryGridView.count(
@@ -235,24 +274,25 @@ class _HomeState extends State<Home> {
                       shrinkWrap: true,
                       physics: const NeverScrollableScrollPhysics(),
                       itemCount: notes.length,
+
                       itemBuilder: (context, index) {
+                        final note = notes[index];
+
                         return InkWell(
-                          onTap: () {
-                            Navigator.push(
+                          onTap: () async {
+                            final result = await Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => NoteView(
-                                  heading: notes[index]["heading"]!,
-                                  note: notes[index]["note"]!,
-                                ),
+                                builder: (context) => NoteView(note: note),
                               ),
                             );
+
+                            if (result == true) {
+                              await getNotes();
+                            }
                           },
-                          child: noteContainer(
-                            notes[index]["heading"]!,
-                            notes[index]["note"]!,
-                            index,
-                          ),
+
+                          child: noteContainer(note.title, note.content, index),
                         );
                       },
                     ),
@@ -266,9 +306,7 @@ class _HomeState extends State<Home> {
     );
   }
 
-  // =========================
   // NOTE CONTAINER
-  // =========================
   Widget noteContainer(String heading, String note, int index) {
     List<Color> noteColors = [Colors.green, Colors.blue, Colors.orange];
 
@@ -292,7 +330,9 @@ class _HomeState extends State<Home> {
               fontWeight: FontWeight.bold,
             ),
           ),
+
           const SizedBox(height: 10),
+
           Text(
             note,
             style: TextStyle(color: white.withOpacity(0.9), fontSize: 13),

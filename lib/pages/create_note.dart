@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_notes/pages/colors.dart';
+
 class CreateNote extends StatefulWidget {
   const CreateNote({super.key});
 
@@ -10,7 +11,7 @@ class CreateNote extends StatefulWidget {
 class _CreateNoteState extends State<CreateNote> {
   @override
   Widget build(BuildContext context) {
-     return Scaffold(
+    return Scaffold(
       backgroundColor: bgColor,
 
       appBar: AppBar(
