@@ -6,7 +6,7 @@ class NoteFields {
   static const String title = 'title';
   static const String content = 'content';
   static const String createdTime = 'createdTime';
-
+  static const String is
   static const String tableName = 'Notes';
 
   static const List<String> values = [id, pin, title, content, createdTime];

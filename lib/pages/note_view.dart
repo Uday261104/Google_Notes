@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:google_notes/pages/colors.dart';
 import 'package:google_notes/pages/edit_note.dart';
 import 'package:google_notes/model/MyNoteModel.dart';
+import 'package:google_notes/services/db.dart';
+import 'package:google_notes/pages/home.dart';
 
 class NoteView extends StatefulWidget {
   final Note note;
@@ -25,7 +27,13 @@ class _NoteViewState extends State<NoteView> {
         actions: [
           // Pin
           IconButton(
-            onPressed: () {},
+            onPressed: () async {
+              await NoteDatabase.instance.togglePin(widget.note);
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => Home()),
+              );
+            },
             icon: Icon(
               widget.note.pin ? Icons.push_pin : Icons.push_pin_outlined,
               color: white.withOpacity(0.7),
@@ -53,6 +61,45 @@ class _NoteViewState extends State<NoteView> {
               }
             },
             icon: Icon(Icons.edit_outlined, color: white.withOpacity(0.7)),
+          ),
+
+          IconButton(
+            onPressed: () async {
+              final shouldDelete = await showDialog<bool>(
+                context: context,
+                builder: (context) {
+                  return AlertDialog(
+                    title: const Text("Delete note?"),
+                    content: const Text(
+                      "Are you sure you want to delete this note?",
+                    ),
+                    actions: [
+                      TextButton(
+                        onPressed: () {
+                          Navigator.pop(context, false);
+                        },
+                        child: const Text("Cancel"),
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          Navigator.pop(context, true);
+                        },
+                        child: const Text("Delete"),
+                      ),
+                    ],
+                  );
+                },
+              );
+
+              if (shouldDelete != true) return;
+
+              await NoteDatabase.instance.deleteNote(widget.note.id!);
+
+              if (!context.mounted) return;
+
+              Navigator.pop(context, true);
+            },
+            icon: const Icon(Icons.delete),
           ),
         ],
       ),

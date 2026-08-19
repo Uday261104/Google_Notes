@@ -1,14 +1,47 @@
 import 'package:flutter/material.dart';
+import 'package:google_notes/model/MyNoteModel.dart';
 import 'package:google_notes/pages/colors.dart';
+import 'package:google_notes/services/db.dart';
 
 class CreateNote extends StatefulWidget {
   const CreateNote({super.key});
-
   @override
   State<CreateNote> createState() => _CreateNoteState();
 }
 
 class _CreateNoteState extends State<CreateNote> {
+  final titleController = TextEditingController();
+  final contentController = TextEditingController();
+
+  Future<void> saveNote() async {
+    final title = titleController.text.trim();
+    final content = contentController.text.trim();
+
+    if (title.isEmpty && content.isEmpty) {
+      return;
+    }
+
+    final note = Note(
+      pin: false,
+      title: title,
+      content: content,
+      createdTime: DateTime.now(),
+    );
+
+    await NoteDatabase.instance.create(note);
+
+    if (!mounted) return;
+
+    Navigator.pop(context, true);
+  }
+
+  @override
+  void dispose() {
+    titleController.dispose();
+    contentController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -21,7 +54,7 @@ class _CreateNoteState extends State<CreateNote> {
         actions: [
           IconButton(
             splashRadius: 17,
-            onPressed: () {},
+            onPressed: saveNote,
             icon: Icon(Icons.save_outlined, color: white.withOpacity(0.7)),
           ),
         ],
@@ -33,6 +66,7 @@ class _CreateNoteState extends State<CreateNote> {
           children: [
             // Title
             TextField(
+              controller: titleController,
               cursorColor: white,
               style: const TextStyle(
                 fontSize: 25,
@@ -59,6 +93,7 @@ class _CreateNoteState extends State<CreateNote> {
             // Notes
             Expanded(
               child: TextField(
+                controller: contentController,
                 keyboardType: TextInputType.multiline,
                 maxLines: null,
                 expands: true,

@@ -97,6 +97,14 @@ class NoteDatabase {
     );
   }
 
+  Future<void> togglePin(Note? note) async {
+    if (note == null) return;
+
+    final updatedNote = note.copy(pin: !note.pin);
+
+    await updateNote(updatedNote);
+  }
+
   Future closedb() async {
     final db = await instance.database;
     db.close();
